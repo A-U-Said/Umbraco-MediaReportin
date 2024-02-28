@@ -1,0 +1,9 @@
+{
+    "javascript": [
+        "~/App_Plugins/MediaReporting/MediaReporting.controller.js",
+        "~/App_Plugins/MediaReporting/MediaReporting.resource.js"
+    ],
+    "css": [
+        "~/App_Plugins/MediaReporting/styles.css"
+    ]
+}

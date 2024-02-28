@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<language>
+
+  <area alias="dashboardTabs">
+    <key alias="mediaReportingDashboard">Media Reporting</key>
+  </area>
+	
+	<area alias="mediaReportingDashboard">
+		<key alias="heading">Media Reporting</key>
+		<key alias="sizeSearch">Minimum size in Kb</key>
+	</area>
+
+</language>

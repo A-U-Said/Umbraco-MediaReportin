@@ -1,0 +1,117 @@
+<div class="mediareporting-dashboard" ng-controller="MediaReportingController as vm">
+
+		<umb-editor-container>
+
+			<umb-load-indicator ng-show="vm.loading"></umb-load-indicator>
+		
+			<!-- Filters -->
+			<div class="flex items-center mb3">
+
+				<div style="font-size: 16px;">
+					<h3 class="bold"><localize key="mediaReportingDashboard_heading">Media Reporting</localize></h3>
+				</div>
+				
+				<div class="flex ml-auto">
+				
+					<div class="umb-filter">
+						<button type="button" class="btn btn-link dropdown-toggle umb-filter__toggle" ng-click="vm.toggleFilter('status')">
+							<span><localize key="general_status">Status</localize>:</span>
+							<span class="bold truncate dib umb-filter__label">{{ vm.getFilterName('status') }}</span>
+							<span class="caret" aria-hidden="true"></span>
+						</button>
+						<umb-dropdown class="pull-right" ng-if="vm.filters.status.open" on-close="vm.filters.status.open = false;">
+							<umb-dropdown-item ng-repeat="mediaState in vm.filters.status.options | filter:{ key: '!All'}" style="padding: 8px 20px 8px 16px;">
+								<div class="flex items-center">
+									<umb-checkbox 
+										input-id="mediaState-{{$index}}"
+										name="mediaState"
+										model="mediaState.selected"
+										on-change="vm.setFilter('status', mediaState)">
+									</umb-checkbox>
+									<label for="mediaState-{{$index}}">
+										<umb-badge size="s" color="{{mediaState.color}}">{{mediaState.name}}</umb-badge>
+									</label>
+								</div>
+							</umb-dropdown-item>
+						</umb-dropdown>
+					</div>
+
+					<div class="umb-filter">
+						<button type="button" class="btn btn-link dropdown-toggle umb-filter__toggle" ng-click="vm.toggleFilter('user')">
+							<span><localize key="general_user">User</localize>:</span>
+							<span class="bold truncate dib umb-filter__label">{{ vm.getFilterName('user') }}</span>
+							<span class="caret" aria-hidden="true"></span>
+						</button>
+						<umb-dropdown class="pull-right" ng-if="vm.filters.user.open" on-close="vm.filters.user.open = false;">
+							<umb-dropdown-item ng-repeat="user in vm.filters.user.options | filter:{ key: '!All'}" style="padding: 8px 20px 8px 16px;">
+								<div class="flex items-center">
+									<umb-checkbox 
+										input-id="user-{{$index}}"
+										name="user"
+										model="user.selected"
+										on-change="vm.setFilter('user', user)">
+									</umb-checkbox>
+									<label for="user-{{$index}}">
+										<span class="flex items-center">
+											<span class="ml1">{{user.name}}</span>
+										</span>
+									</label>
+								</div>
+							</umb-dropdown-item>
+						</umb-dropdown>
+					</div>
+
+					<div class="umb-filter">
+						<button type="button" class="btn btn-link dropdown-toggle umb-filter__toggle" ng-click="vm.toggleFilter('type')">
+							<span>Media Type:</span>
+							<span class="bold truncate dib umb-filter__label">{{ vm.getFilterName('type') }}</span>
+							<span class="caret" aria-hidden="true"></span>
+						</button>
+						<umb-dropdown class="pull-right" ng-if="vm.filters.type.open" on-close="vm.filters.type.open = false;">
+							<umb-dropdown-item ng-repeat="type in vm.filters.type.options | filter:{ key: '!All'}" style="padding: 8px 20px 8px 16px;">
+								<div class="flex items-center">
+									<umb-checkbox 
+										input-id="type-{{$index}}"
+										name="type"
+										model="type.selected"
+										on-change="vm.setFilter('type', type)">
+									</umb-checkbox>
+									<label for="type-{{$index}}">
+										<span class="flex items-center">
+											<umb-icon icon="{{type.icon}}"></umb-icon>
+											<span class="ml1">{{type.name}}</span>
+										</span>
+									</label>
+								</div>
+							</umb-dropdown-item>
+						</umb-dropdown>
+					</div>
+
+					<div>
+						<input 
+							id="size-filter"
+							type="number"
+							class="form-control"
+							localize="placeholder"
+							placeholder="@mediaReportingDashboard_sizeSearch"
+							min="1"
+							pattern="[0-9]*"
+							val-highlight="{{hasError}}"
+							ng-model="vm.size"
+							ng-change="vm.sizeSearchOnChange()"
+							ng-keydown="vm.sizeSearchOnKeyDown($event)"
+							overlay-submit-on-enter="false"
+							fix-number
+						>
+					</div>
+
+					<umb-mini-search model="vm.search">
+					</umb-mini-search>
+					
+				</div>
+			
+			</div>
+
+		</umb-editor-container>
+	
+</div>
