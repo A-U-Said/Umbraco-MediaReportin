@@ -112,6 +112,65 @@
 			
 			</div>
 
+
+			<!-- Layout: Table -->
+			<div class="umb-table">
+				<div class="umb-table-head">
+					<div class="umb-table-row">
+						<div class="umb-table-cell not-fixed" style="flex-basis: 25%;"><localize key="">File Name</localize></div>
+						<div class="umb-table-cell not-fixed" style="flex-basis: 15%;"><localize key="">Created By</localize></div>
+						<div class="umb-table-cell not-fixed" style="flex-basis: 10%;"><localize key="">File Size</localize></div>
+						<div class="umb-table-cell not-fixed" style="flex-basis: 15%;"><localize key="">Created Date</localize></div>
+						<div class="umb-table-cell not-fixed" style="flex-basis: 10%;"><localize key="">Status</localize></div>
+						<div class="umb-table-cell not-fixed" style="flex-basis: 20%;"><localize key="">MetaData</localize></div>
+					</div>
+				</div>
+				<div class="umb-table-body">
+					<div 
+						ng-repeat="mediaItem in vm.tableResults track by mediaItem.id"
+						class="umb-table-row umb-outline umb-outline--surrounding"
+					>
+						<div class="umb-table-cell not-fixed" style="flex-basis: 25%; overflow-wrap: anywhere;" scope="row">
+							{{ mediaItem.fileName }}
+						</div>
+						<div class="umb-table-cell not-fixed" style="flex-basis: 15%; align-items: center;" scope="row">
+							<umb-avatar
+								size="xs"
+								color="secondary"
+								name="{{mediaItem.creator.name}}"
+								img-src="{{mediaItem.creator.avatars[0]}}"
+								img-srcset="{{mediaItem.creator.avatars[1]}} 2x, {{mediaItem.creator.avatars[2]}} 3x">
+							</umb-avatar>
+							<div class="umb-user-card__name" style="margin-left: 8px;">{{mediaItem.creator.name}}</div>
+						</div>
+						<div class="umb-table-cell not-fixed" style="flex-basis: 10%;" scope="row">
+							{{ mediaItem.fileSize }}
+						</div>
+						<div class="umb-table-cell not-fixed" style="flex-basis: 15%;" scope="row">
+							{{ mediaItem.createdDate | date:'mediumDate' }}
+						</div>
+						<div class="umb-table-cell not-fixed" style="flex-basis: 10%;" scope="row">
+							<umb-badge ng-if="mediaItem.isInBin" size="s" color="warning">Deleted</umb-badge>
+							<umb-badge ng-if="!mediaItem.isInBin" size="s" color="success">Active</umb-badge>
+						</div>
+						<div class="umb-table-cell not-fixed" style="flex-basis: 20%; flex-flow: column wrap;" scope="row">
+							<p>Media Type: {{ mediaItem.mediaType }}</p>
+							<p ng-if="mediaItem.imageWidth">Image Width: {{ mediaItem.imageWidth }}</p>
+							<p ng-if="mediaItem.imageHeight">Image Height: {{ mediaItem.imageHeight }}</p>
+						</div>
+					</div>
+				</div>
+			</div>
+
+			<div ng-if="!vm.loading" class="flex justify-center">
+				<umb-pagination
+					ng-if="vm.paging.totalPages"
+					page-number="vm.paging.pageNumber"
+					total-pages="vm.paging.totalPages"
+					on-change="vm.changePageNumber(pageNumber)">
+				</umb-pagination>
+			</div>
+
 		</umb-editor-container>
 	
 </div>

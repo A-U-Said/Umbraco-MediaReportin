@@ -1,11 +1,15 @@
-﻿using MediaReporting.Messages.Query;
+﻿using MediaReporting.Extensions;
+using MediaReporting.Messages.Query;
 using MediaReporting.Messages.View;
 using MediaReporting.Specifications;
 using Microsoft.AspNetCore.Mvc;
 using System.Net.Mime;
 using System.Text;
 using Umbraco.Cms.Core;
+using Umbraco.Cms.Core.Mapping;
 using Umbraco.Cms.Core.Models;
+using Umbraco.Cms.Core.Models.ContentEditing;
+using Umbraco.Cms.Core.Models.Membership;
 using Umbraco.Cms.Core.Services;
 
 namespace MediaReporting.Helpers
@@ -14,18 +18,21 @@ namespace MediaReporting.Helpers
     {
         private readonly IMediaService _mediaService;
         private readonly IUserService _userService;
+        private readonly IUmbracoMapper _umbracoMapper;
 
         public MediaReportHelper(
             IMediaService mediaService,
-            IUserService userService
+            IUserService userService,
+            IUmbracoMapper umbracoMapper
         ) 
         {
             _mediaService = mediaService;
             _userService = userService;
+            _umbracoMapper = umbracoMapper;
         }
 
 
-        public IEnumerable<MediaItemView> GetMediaForFolder(IEnumerable<IMedia> media, MediaSizeFilter filter)
+        public IEnumerable<MediaItemView> GetMediaForFolder(IEnumerable<IMedia> media, MediaSearchFilter filter)
         {
             var result = new List<MediaItemView>();
 
@@ -45,9 +52,14 @@ namespace MediaReporting.Helpers
                     }
 
                     var mediaFilterSpecification = new MediaQuerySpecification(filter);
-                    if (mediaFilterSpecification.IsSatisfiedBy(mediaItem))
+                    var mediaPropertiesSpecification = new MediaSizeSpecification(filter.MinimumSize);
+
+                    if (mediaFilterSpecification.IsSatisfiedBy(mediaItem) && mediaPropertiesSpecification.IsSatisfiedBy(mediaItem))
                     {
-                        result.Add(new MediaItemView(creator.Username, mediaItem));
+                        var creatorMapped = _umbracoMapper
+                            .Map<IUser, UserBasic>(creator)
+                            .ThrowIfNull($"The user could not be mapped to a view");
+                        result.Add(new MediaItemView(creatorMapped, mediaItem));
                     }
                 }
             }

@@ -1,5 +1,7 @@
 ﻿using Umbraco.Cms.Core;
 using Umbraco.Cms.Core.Models;
+using Umbraco.Cms.Core.Models.ContentEditing;
+using Umbraco.Cms.Core.Models.Membership;
 
 
 namespace MediaReporting.Messages.View
@@ -10,9 +12,17 @@ namespace MediaReporting.Messages.View
         {
         }
 
-        public MediaItemView(string creator, IMedia mediaItem)
+        public MediaItemView(UserBasic creator, IMedia mediaItem)
         {
-            Creator = creator;
+            Id = mediaItem.Id;
+            Creator = new UserTinyView()
+            {
+                Name = creator.Name,
+                Username = creator.Username,
+                Email = creator.Email,
+                Avatars = creator.Avatars,
+                UserState = creator.UserState,
+            };
             CreatedDate = mediaItem.CreateDate;
             FileSize = mediaItem.GetValue<int>(Constants.Conventions.Media.Bytes);
             MediaType = mediaItem.ContentType.Alias;
@@ -25,7 +35,8 @@ namespace MediaReporting.Messages.View
         }
 
 
-        public string Creator { get; set; }
+        public int Id { get; set; }
+        public UserTinyView Creator { get; set; }
         public DateTime CreatedDate { get; set; }
         public int FileSize { get; set; }
         public string MediaType { get; set; }

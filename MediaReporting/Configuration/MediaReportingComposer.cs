@@ -1,4 +1,5 @@
-﻿using MediaReporting.Helpers;
+﻿using MediaReporting.Data;
+using MediaReporting.Helpers;
 using Umbraco.Cms.Core.Composing;
 
 namespace MediaReporting.Configuration
@@ -8,6 +9,7 @@ namespace MediaReporting.Configuration
         public void Compose(IUmbracoBuilder builder)
         {
             builder.Services.AddSingleton<IMediaReportHelper, MediaReportHelper>();
+            builder.Services.AddSingleton<IMediaQueries, MediaQueries>();
         }
     }
 }

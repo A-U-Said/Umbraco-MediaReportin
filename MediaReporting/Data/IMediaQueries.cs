@@ -7,6 +7,6 @@ namespace MediaReporting.Data
 {
     public interface IMediaQueries
     {
-        IEnumerable<IMedia> GetPagedDescendants(Pagination pagination, out long totalRecords, IQuery<IMedia>? filter = null, Ordering? ordering = null);
+        Task<IEnumerable<dynamic>> GetPagedDescendants(Pagination pagination, MediaSearchFilter filter);
     }
 }

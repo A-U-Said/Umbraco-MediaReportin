@@ -23,6 +23,9 @@ angular.module("umbraco").controller("MediaReportingController", function ($scop
 		vm.size = null;
 		vm.search = "";
 
+		vm.tableResults = [];
+		vm.paging = { pageIndex: 0, pageSize: 25 };
+
 
 		const init = () => {
 			vm.loading = true;
@@ -52,24 +55,47 @@ angular.module("umbraco").controller("MediaReportingController", function ($scop
 				});
 
 			vm.loading = false;
+
+			searchMedia();
+		}
+
+
+		const searchMedia = () => {
+			mediaReportingResource.searchMedia(
+				vm.search,
+				{
+					creatorIds: vm.filters.user.options.filter(x => x.selected === true)?.map(x => x.id),
+					mediaStatus: vm.filters.status.options.filter(x => x.selected === true)?.map(x => x.id),
+					mediaTypeIds: vm.filters.type.options.filter(x => x.selected === true)?.map(x => x.id),
+					minimumSize: vm.size
+				}, 
+				{ 
+					pageIndex: 0, 
+					pageSize: 25
+				}
+			)
+			.then(response => {
+				vm.tableResults = response.items;
+				vm.paging = response.paging;
+			})
 		}
 
 
 		$scope.$watch("vm.size", _.debounce((newVal, oldVal) => {
 			if (newVal !== oldVal) {
-				console.log(vm.size);
+				searchMedia();
 			}
 		}, 500));
 
 		$scope.$watch("vm.search", _.debounce((newVal, oldVal) => {
 			if (newVal !== oldVal) {
-				console.log(vm.search);
+				searchMedia();
 			}
 		}, 500));
 
 		$scope.$watch("vm.filters", _.debounce((newVal, oldVal) => {
 			if (newVal !== oldVal) {
-				console.log(vm.filters);
+				searchMedia();
 			}
 		}, 500), true);
 
