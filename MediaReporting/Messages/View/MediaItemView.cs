@@ -17,6 +17,7 @@ namespace MediaReporting.Messages.View
             Id = mediaItem.Id;
             Creator = new UserTinyView()
             {
+                Id = creator.Id,
                 Name = creator.Name,
                 Username = creator.Username,
                 Email = creator.Email,

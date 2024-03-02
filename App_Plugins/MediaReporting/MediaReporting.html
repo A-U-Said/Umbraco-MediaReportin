@@ -63,7 +63,7 @@
 
 					<div class="umb-filter">
 						<button type="button" class="btn btn-link dropdown-toggle umb-filter__toggle" ng-click="vm.toggleFilter('type')">
-							<span>Media Type:</span>
+							<span><localize key="mediaReportingDashboard_mediaType">Media Type</localize>:</span>
 							<span class="bold truncate dib umb-filter__label">{{ vm.getFilterName('type') }}</span>
 							<span class="caret" aria-hidden="true"></span>
 						</button>
@@ -113,27 +113,51 @@
 			</div>
 
 
+			<umb-empty-state
+				ng-if="!vm.loading && !vm.tableResults.length"
+				position="center">
+				<localize key="general_searchNoResult">Sorry, we can not find what you are looking for.</localize>
+			</umb-empty-state>
+
+
 			<!-- Layout: Table -->
 			<div class="umb-table">
 				<div class="umb-table-head">
 					<div class="umb-table-row">
-						<div class="umb-table-cell not-fixed" style="flex-basis: 25%;"><localize key="">File Name</localize></div>
-						<div class="umb-table-cell not-fixed" style="flex-basis: 15%;"><localize key="">Created By</localize></div>
-						<div class="umb-table-cell not-fixed" style="flex-basis: 10%;"><localize key="">File Size</localize></div>
-						<div class="umb-table-cell not-fixed" style="flex-basis: 15%;"><localize key="">Created Date</localize></div>
-						<div class="umb-table-cell not-fixed" style="flex-basis: 10%;"><localize key="">Status</localize></div>
-						<div class="umb-table-cell not-fixed" style="flex-basis: 20%;"><localize key="">MetaData</localize></div>
+						<div class="umb-table-cell not-fixed" style="flex-basis: 25%;">
+							<localize key="mediaReportingDashboard_fileName">File Name</localize>
+						</div>
+						<div class="umb-table-cell not-fixed" style="flex-basis: 15%;">
+							<localize key="mediaReportingDashboard_createdBy">Created By</localize>
+						</div>
+						<div class="umb-table-cell not-fixed" style="flex-basis: 10%;">
+							<localize key="mediaReportingDashboard_fileSize">File Size</localize>
+						</div>
+						<div class="umb-table-cell not-fixed" style="flex-basis: 15%;">
+							<localize key="mediaReportingDashboard_createdDate">Created Date</localize>
+						</div>
+						<div class="umb-table-cell not-fixed" style="flex-basis: 10%;">
+							<localize key="general_status">Status</localize>
+						</div>
+						<div class="umb-table-cell not-fixed" style="flex-basis: 20%;">
+							<localize key="mediaReportingDashboard_metaData">MetaData</localize>
+						</div>
 					</div>
 				</div>
 				<div class="umb-table-body">
 					<div 
 						ng-repeat="mediaItem in vm.tableResults track by mediaItem.id"
+						ng-click="vm.clickMedia(mediaItem, $event)"
 						class="umb-table-row umb-outline umb-outline--surrounding"
 					>
 						<div class="umb-table-cell not-fixed" style="flex-basis: 25%; overflow-wrap: anywhere;" scope="row">
 							{{ mediaItem.fileName }}
 						</div>
-						<div class="umb-table-cell not-fixed" style="flex-basis: 15%; align-items: center;" scope="row">
+						<div class="umb-table-cell not-fixed" 
+							style="flex-basis: 15%; align-items: center; cursor: pointer;" 
+							ng-click="vm.clickUser(mediaItem.creator, $event)" 
+							scope="row"
+						>
 							<umb-avatar
 								size="xs"
 								color="secondary"
@@ -144,7 +168,7 @@
 							<div class="umb-user-card__name" style="margin-left: 8px;">{{mediaItem.creator.name}}</div>
 						</div>
 						<div class="umb-table-cell not-fixed" style="flex-basis: 10%;" scope="row">
-							{{ mediaItem.fileSize }}
+							{{ vm.formatBytes(mediaItem.fileSize) }}
 						</div>
 						<div class="umb-table-cell not-fixed" style="flex-basis: 15%;" scope="row">
 							{{ mediaItem.createdDate | date:'mediumDate' }}
@@ -154,21 +178,40 @@
 							<umb-badge ng-if="!mediaItem.isInBin" size="s" color="success">Active</umb-badge>
 						</div>
 						<div class="umb-table-cell not-fixed" style="flex-basis: 20%; flex-flow: column wrap;" scope="row">
-							<p>Media Type: {{ mediaItem.mediaType }}</p>
-							<p ng-if="mediaItem.imageWidth">Image Width: {{ mediaItem.imageWidth }}</p>
-							<p ng-if="mediaItem.imageHeight">Image Height: {{ mediaItem.imageHeight }}</p>
+							<p>
+								<localize key="mediaReportingDashboard_mediaType">Media Type</localize>: {{ mediaItem.mediaType }}
+							</p>
+							<p ng-if="mediaItem.imageWidth">
+								<localize key="mediaReportingDashboard_imageWidth">Image Width</localize>: {{ mediaItem.imageWidth }}
+							</p>
+							<p ng-if="mediaItem.imageHeight">
+								<localize key="mediaReportingDashboard_imageHeight">Image Height</localize>: {{ mediaItem.imageHeight }}
+							</p>
 						</div>
 					</div>
 				</div>
 			</div>
 
-			<div ng-if="!vm.loading" class="flex justify-center">
+			<div ng-if="!vm.loading" class="flex justify-center" style="position: relative;">
+
 				<umb-pagination
 					ng-if="vm.paging.totalPages"
 					page-number="vm.paging.pageNumber"
 					total-pages="vm.paging.totalPages"
 					on-change="vm.changePageNumber(pageNumber)">
 				</umb-pagination>
+
+				<umb-button
+					ng-if="vm.tableResults.length"
+					button-style="action"
+		
+					type="button"
+					action="vm.exportResults()"
+					label-key="mediaReportingDashboard_exportResults"
+					size="m"
+					style="position: absolute; right: 0; margin-top: 10px;">
+				</umb-button>
+
 			</div>
 
 		</umb-editor-container>

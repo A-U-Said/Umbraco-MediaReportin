@@ -88,7 +88,7 @@ namespace MediaReporting.Helpers
             foreach (var mediaItem in results)
             {
                 var row = string.Join(",",
-                    mediaItem.Creator,
+                    mediaItem.Creator.Username,
                     mediaItem.CreatedDate.ToString("G"),
                     mediaItem.FileSize,
                     mediaItem.MediaType,

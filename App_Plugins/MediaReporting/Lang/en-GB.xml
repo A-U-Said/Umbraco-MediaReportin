@@ -8,6 +8,21 @@
 	<area alias="mediaReportingDashboard">
 		<key alias="heading">Media Reporting</key>
 		<key alias="sizeSearch">Minimum size in Kb</key>
+
+		<key alias="mediaType">Media Type</key>
+
+		<key alias="fileName">File Name</key>
+		<key alias="createdBy">Created By</key>
+		<key alias="fileSize">File Size</key>
+		<key alias="createdDate">Created Date</key>
+		<key alias="metaData">MetaData</key>
+		
+		<key alias="mediaType">Media Type</key>
+		<key alias="imageWidth">Image Width</key>
+		<key alias="imageHeight">Image Height</key>
+
+		<key alias="exportResults">Export Results</key>
+
 	</area>
 
 </language>

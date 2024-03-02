@@ -19,6 +19,17 @@ angular.module('umbraco.resources').factory('mediaReportingResource', function($
     return qs;
   }
 
+  const buildMediaSearchQuery = (searchTerm, filter) => {
+    var qs = "";
+    qs += buildQueryStringFromArray("creatorIds", filter.creatorIds, true);
+    qs += buildQueryStringFromArray("mediaStatus", filter.mediaStatus, true);
+    qs += buildQueryStringFromArray("mediaTypeIds", filter.mediaTypeIds, true);
+    qs += filter.minimumSize ? `minimumSize=${filter.minimumSize}&` : "&";
+    qs += searchTerm ? `searchTerm=${searchTerm}&` : "";
+    return qs;
+  }
+
+
   return {
 
     getMediaTypes: () => {
@@ -29,12 +40,7 @@ angular.module('umbraco.resources').factory('mediaReportingResource', function($
     },
 		
     searchMedia: (searchTerm, filter, paging) => {
-      var qs = "";
-      qs += buildQueryStringFromArray("creatorIds", filter.creatorIds, true);
-      qs += buildQueryStringFromArray("mediaStatus", filter.mediaStatus, true);
-      qs += buildQueryStringFromArray("mediaTypeIds", filter.mediaTypeIds, true);
-      qs += filter.minimumSize ? `minimumSize=${filter.minimumSize}&` : "&";
-      qs += searchTerm ? `searchTerm=${searchTerm}&` : "";
+      var qs = buildMediaSearchQuery(searchTerm, filter);
       qs += umbRequestHelper.dictionaryToQueryString([
         { pageIndex: paging.pageIndex },
         { pageSize: paging.pageSize }
@@ -44,6 +50,14 @@ angular.module('umbraco.resources').factory('mediaReportingResource', function($
         `Failed to search media`
       );
     },
+
+    exportResults: (searchTerm, filter) => {
+      var qs = buildMediaSearchQuery(searchTerm, filter);
+      return umbRequestHelper.resourcePromise(
+        $http.get(`${baseUrl}/GetAllMediaSizesCSV?${qs}`),
+        `Failed to export media search`
+      );
+    }
 
   }
 
