@@ -16,12 +16,16 @@ using System.Text.RegularExpressions;
 using Umbraco.Cms.Core.Mapping;
 using Umbraco.Cms.Core.Models.ContentEditing;
 using Umbraco.Cms.Core.Models.Membership;
+using Microsoft.AspNetCore.Authorization;
+using Polly;
+using Umbraco.Cms.Web.Common.Authorization;
+using Umbraco.Cms.Web.BackOffice.Controllers;
 
 namespace MediaReporting.Controllers
 {
     [PluginController("MediaReporting")]
     //[Authorize(Policy = AuthorizationPolicies.BackOfficeAccess)]
-    public class MediaReportingController : UmbracoApiController
+    public class MediaReportingController : UmbracoAuthorizedApiController
     {
         private readonly IMediaService _mediaService;
         private readonly IMediaTypeService _mediaTypeService;
@@ -49,7 +53,7 @@ namespace MediaReporting.Controllers
 
 
         [HttpGet]
-        public IActionResult GetAllMediaSizes([FromQuery] string? searchTerm, [FromQuery] MediaSearchFilter filter, [FromQuery] Pagination pagination)
+        public IActionResult FilterMedia([FromQuery] string? searchTerm, [FromQuery] MediaSearchFilter filter, [FromQuery] Pagination pagination)
         {
             var mediaFilterSpecification = new MediaQuerySpecification(filter);
 
@@ -84,7 +88,7 @@ namespace MediaReporting.Controllers
                     var creatorMapped = _umbracoMapper
                         .Map<IUser, UserBasic>(creator)
                         .ThrowIfNull($"The user could not be mapped to a view");
-                    return new MediaItemView(creatorMapped, mediaItem);
+                    return new MediaItemView(creatorMapped, mediaItem, Request.Host.Value);
                 })
             .ToPaginatedView(totalRecords, pagination);
 
@@ -93,10 +97,10 @@ namespace MediaReporting.Controllers
 
 
         [HttpGet]
-        public IActionResult GetAllMediaSizesCSV([FromQuery] MediaSearchFilter filter)
+        public IActionResult ExportFilteredMedia([FromQuery] MediaSearchFilter filter)
         {
             var media = _mediaService.GetRootMedia();
-            var results = _mediaReportHelper.GetMediaForFolder(media, filter);
+            var results = _mediaReportHelper.GetMediaForFolder(media, filter, Request.Host.Value);
             return _mediaReportHelper.GenerateCsv(results);
         }
 

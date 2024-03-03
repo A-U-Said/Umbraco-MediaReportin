@@ -146,46 +146,46 @@
 				</div>
 				<div class="umb-table-body">
 					<div 
-						ng-repeat="mediaItem in vm.tableResults track by mediaItem.id"
+						ng-repeat="mediaItem in vm.tableResults track by mediaItem.Id"
 						ng-click="vm.clickMedia(mediaItem, $event)"
 						class="umb-table-row umb-outline umb-outline--surrounding"
 					>
 						<div class="umb-table-cell not-fixed" style="flex-basis: 25%; overflow-wrap: anywhere;" scope="row">
-							{{ mediaItem.fileName }}
+							{{ mediaItem.FileName }}
 						</div>
 						<div class="umb-table-cell not-fixed" 
 							style="flex-basis: 15%; align-items: center; cursor: pointer;" 
-							ng-click="vm.clickUser(mediaItem.creator, $event)" 
+							ng-click="vm.clickUser(mediaItem.Creator, $event)" 
 							scope="row"
 						>
 							<umb-avatar
 								size="xs"
 								color="secondary"
-								name="{{mediaItem.creator.name}}"
-								img-src="{{mediaItem.creator.avatars[0]}}"
-								img-srcset="{{mediaItem.creator.avatars[1]}} 2x, {{mediaItem.creator.avatars[2]}} 3x">
+								name="{{mediaItem.Creator.Name}}"
+								img-src="{{mediaItem.Creator.Avatars[0]}}"
+								img-srcset="{{mediaItem.Creator.Avatars[1]}} 2x, {{mediaItem.Creator.Avatars[2]}} 3x">
 							</umb-avatar>
-							<div class="umb-user-card__name" style="margin-left: 8px;">{{mediaItem.creator.name}}</div>
+							<div class="umb-user-card__name" style="margin-left: 8px;">{{mediaItem.Creator.Name}}</div>
 						</div>
 						<div class="umb-table-cell not-fixed" style="flex-basis: 10%;" scope="row">
-							{{ vm.formatBytes(mediaItem.fileSize) }}
+							{{ vm.formatBytes(mediaItem.FileSize) }}
 						</div>
 						<div class="umb-table-cell not-fixed" style="flex-basis: 15%;" scope="row">
-							{{ mediaItem.createdDate | date:'mediumDate' }}
+							{{ mediaItem.CreatedDate | date:'mediumDate' }}
 						</div>
 						<div class="umb-table-cell not-fixed" style="flex-basis: 10%;" scope="row">
-							<umb-badge ng-if="mediaItem.isInBin" size="s" color="warning">Deleted</umb-badge>
-							<umb-badge ng-if="!mediaItem.isInBin" size="s" color="success">Active</umb-badge>
+							<umb-badge ng-if="mediaItem.IsInBin" size="s" color="warning">Deleted</umb-badge>
+							<umb-badge ng-if="!mediaItem.IsInBin" size="s" color="success">Active</umb-badge>
 						</div>
 						<div class="umb-table-cell not-fixed" style="flex-basis: 20%; flex-flow: column wrap;" scope="row">
 							<p>
-								<localize key="mediaReportingDashboard_mediaType">Media Type</localize>: {{ mediaItem.mediaType }}
+								<localize key="mediaReportingDashboard_mediaType">Media Type</localize>: {{ mediaItem.MediaType }}
 							</p>
-							<p ng-if="mediaItem.imageWidth">
-								<localize key="mediaReportingDashboard_imageWidth">Image Width</localize>: {{ mediaItem.imageWidth }}
+							<p ng-if="mediaItem.ImageWidth">
+								<localize key="mediaReportingDashboard_imageWidth">Image Width</localize>: {{ mediaItem.ImageWidth }}
 							</p>
-							<p ng-if="mediaItem.imageHeight">
-								<localize key="mediaReportingDashboard_imageHeight">Image Height</localize>: {{ mediaItem.imageHeight }}
+							<p ng-if="mediaItem.ImageHeight">
+								<localize key="mediaReportingDashboard_imageHeight">Image Height</localize>: {{ mediaItem.ImageHeight }}
 							</p>
 						</div>
 					</div>
@@ -195,16 +195,16 @@
 			<div ng-if="!vm.loading" class="flex justify-center" style="position: relative;">
 
 				<umb-pagination
-					ng-if="vm.paging.totalPages"
-					page-number="vm.paging.pageNumber"
-					total-pages="vm.paging.totalPages"
+					ng-if="vm.paging.TotalPages"
+					page-number="vm.paging.PageNumber"
+					total-pages="vm.paging.TotalPages"
 					on-change="vm.changePageNumber(pageNumber)">
 				</umb-pagination>
 
 				<umb-button
 					ng-if="vm.tableResults.length"
 					button-style="action"
-		
+					state="vm.exportState"
 					type="button"
 					action="vm.exportResults()"
 					label-key="mediaReportingDashboard_exportResults"

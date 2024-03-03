@@ -32,7 +32,7 @@ namespace MediaReporting.Helpers
         }
 
 
-        public IEnumerable<MediaItemView> GetMediaForFolder(IEnumerable<IMedia> media, MediaSearchFilter filter)
+        public IEnumerable<MediaItemView> GetMediaForFolder(IEnumerable<IMedia> media, MediaSearchFilter filter, string host)
         {
             var result = new List<MediaItemView>();
 
@@ -41,7 +41,7 @@ namespace MediaReporting.Helpers
                 if (mediaItem.ContentType.Alias == Constants.Conventions.MediaTypes.Folder)
                 {
                     var childCount = _mediaService.CountChildren(mediaItem.Id);
-                    result.AddRange(GetMediaForFolder(_mediaService.GetPagedChildren(mediaItem.Id, 0, childCount + 10, out long _), filter));
+                    result.AddRange(GetMediaForFolder(_mediaService.GetPagedChildren(mediaItem.Id, 0, childCount + 10, out long _), filter, host));
                 }
                 else
                 {
@@ -59,7 +59,7 @@ namespace MediaReporting.Helpers
                         var creatorMapped = _umbracoMapper
                             .Map<IUser, UserBasic>(creator)
                             .ThrowIfNull($"The user could not be mapped to a view");
-                        result.Add(new MediaItemView(creatorMapped, mediaItem));
+                        result.Add(new MediaItemView(creatorMapped, mediaItem, host));
                     }
                 }
             }

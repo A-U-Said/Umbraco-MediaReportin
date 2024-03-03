@@ -26,6 +26,8 @@ angular.module("umbraco").controller("MediaReportingController", function ($scop
 		vm.tableResults = [];
 		vm.paging = { pageIndex: 0, pageSize: 25 };
 
+		vm.exportState = "init";
+
 
 		const init = () => {
 			vm.loading = true;
@@ -44,8 +46,8 @@ angular.module("umbraco").controller("MediaReportingController", function ($scop
 				});
 
 			mediaReportingResource.getMediaTypes()
-				.then(res => {
-					vm.filters.type.options = res.map(type => ({ 
+				.then(response => {
+					vm.filters.type.options = response.map(type => ({ 
 						id: type.id, 
 						name: type.name, 
 						alias: type.alias, 
@@ -77,8 +79,9 @@ angular.module("umbraco").controller("MediaReportingController", function ($scop
 				}
 			)
 			.then(response => {
-				vm.tableResults = response.items;
-				vm.paging = response.paging;
+				console.log(response.Items);
+				vm.tableResults = response.Items;
+				vm.paging = response.Paging;
 			})
 		}
 
@@ -152,7 +155,7 @@ angular.module("umbraco").controller("MediaReportingController", function ($scop
 			$event.stopPropagation();
 			$event.preventDefault();
 			$location
-				.path(`/users/users/user/${user.id}`)
+				.path(`/users/users/user/${user.Id}`)
 				.search("dashboard", null);
 		}
 
@@ -160,14 +163,14 @@ angular.module("umbraco").controller("MediaReportingController", function ($scop
 		vm.clickMedia = (mediaItem, $event) => {
 			$event.stopPropagation();
 			$event.preventDefault();
-			console.log(mediaItem);
 			$location
-				.path(`/media/media/edit/${mediaItem.id}`)
+				.path(`/media/media/edit/${mediaItem.Id}`)
 				.search("dashboard", null);
 		}
 
 
 		vm.exportResults = () => {
+			vm.exportState = "busy";
 			mediaReportingResource.exportResults(
 				vm.search,
 				{
@@ -182,7 +185,11 @@ angular.module("umbraco").controller("MediaReportingController", function ($scop
 				attachment.href = "data:attachment/csv," + encodeURIComponent(reportData);
 				attachment.download = "mediaReport.csv";
 				attachment.click();
+				vm.exportState = "success";
 			})
+			.catch(error => {
+				vm.exportState = "error";
+			});
 		}
 
 	

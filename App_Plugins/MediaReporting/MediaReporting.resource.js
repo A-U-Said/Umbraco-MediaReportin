@@ -1,6 +1,6 @@
 angular.module('umbraco.resources').factory('mediaReportingResource', function($q, $http, umbRequestHelper) {
 
-  const baseUrl = "MediaReporting/MediaReporting";
+  const baseUrl = "backoffice/MediaReporting/MediaReporting";
 
   const buildQueryStringFromArray = (paramName, arr, appendAmp) => {
     if (!arr || arr.length === 0) {
@@ -46,7 +46,7 @@ angular.module('umbraco.resources').factory('mediaReportingResource', function($
         { pageSize: paging.pageSize }
       ]);
       return umbRequestHelper.resourcePromise(
-        $http.get(`${baseUrl}/GetAllMediaSizes?${qs}`),
+        $http.get(`${baseUrl}/FilterMedia?${qs}`),
         `Failed to search media`
       );
     },
@@ -54,7 +54,7 @@ angular.module('umbraco.resources').factory('mediaReportingResource', function($
     exportResults: (searchTerm, filter) => {
       var qs = buildMediaSearchQuery(searchTerm, filter);
       return umbRequestHelper.resourcePromise(
-        $http.get(`${baseUrl}/GetAllMediaSizesCSV?${qs}`),
+        $http.get(`${baseUrl}/ExportFilteredMedia?${qs}`),
         `Failed to export media search`
       );
     }

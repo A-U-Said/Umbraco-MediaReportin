@@ -7,7 +7,7 @@ namespace MediaReporting.Helpers
 {
     public interface IMediaReportHelper
     {
-        IEnumerable<MediaItemView> GetMediaForFolder(IEnumerable<IMedia> media, MediaSearchFilter filter);
+        IEnumerable<MediaItemView> GetMediaForFolder(IEnumerable<IMedia> media, MediaSearchFilter filter, string host);
         FileContentResult GenerateCsv(IEnumerable<MediaItemView> results);
     }
 }

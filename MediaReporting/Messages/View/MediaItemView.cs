@@ -12,7 +12,7 @@ namespace MediaReporting.Messages.View
         {
         }
 
-        public MediaItemView(UserBasic creator, IMedia mediaItem)
+        public MediaItemView(UserBasic creator, IMedia mediaItem, string host)
         {
             Id = mediaItem.Id;
             Creator = new UserTinyView()
@@ -32,7 +32,7 @@ namespace MediaReporting.Messages.View
             ImageHeight = mediaItem.GetValue<int?>(Constants.Conventions.Media.Height);
             IsInBin = mediaItem.Trashed;
             Url = mediaItem.GetValue<string?>(Constants.Conventions.Media.File);
-            BackofficeUrl = $"https://lionhearttrust.org.uk/lionheart-cms#/media/media/edit/{mediaItem.Id}";
+            BackofficeUrl = $"https://{host}/umbraco/media/media/edit/{mediaItem.Id}";
         }
 
 
