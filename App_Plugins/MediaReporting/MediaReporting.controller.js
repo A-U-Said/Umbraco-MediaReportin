@@ -48,10 +48,10 @@ angular.module("umbraco").controller("MediaReportingController", function ($scop
 			mediaReportingResource.getMediaTypes()
 				.then(response => {
 					vm.filters.type.options = response.map(type => ({ 
-						id: type.id, 
-						name: type.name, 
-						alias: type.alias, 
-						icon: type.icon,
+						id: type.Id, 
+						name: type.Name, 
+						alias: type.Alias, 
+						icon: type.Icon,
 						selected: false 
 					}));
 				});
@@ -64,7 +64,7 @@ angular.module("umbraco").controller("MediaReportingController", function ($scop
 
 		const searchMedia = (pageIndex) => {
 			// It's easier to clear the results to scroll to the top of the table
-			vm.tableResults = [];
+			//vm.tableResults = [];
 			mediaReportingResource.searchMedia(
 				vm.search,
 				{
@@ -79,9 +79,15 @@ angular.module("umbraco").controller("MediaReportingController", function ($scop
 				}
 			)
 			.then(response => {
-				console.log(response.Items);
 				vm.tableResults = response.Items;
 				vm.paging = response.Paging;
+				const pageTop = document.querySelector("#pageTop");
+				console.log(pageTop);
+				pageTop.scrollIntoView({
+					behavior: "instant",
+					block: "end",
+					inline: "end"
+				});
 			})
 		}
 
